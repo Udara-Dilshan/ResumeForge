@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -11,6 +11,15 @@ import {
 } from '../../schemas/resumeSchema'
 
 import { useResumeStore } from '../../store/resumeStore'
+import type { ProfilePhotoMimeType } from '../../types/resume'
+
+const MAX_PHOTO_SIZE = 2 * 1024 * 1024
+
+const allowedTypes: ProfilePhotoMimeType[] = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+]
 
 function PersonalInfoStep() {
   const personalInfo = useResumeStore(
@@ -24,6 +33,9 @@ function PersonalInfoStep() {
   const nextStep = useResumeStore(
     (state) => state.nextStep,
   )
+
+  const [photoError, setPhotoError] = useState('')
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const {
     register,
@@ -66,11 +78,132 @@ function PersonalInfoStep() {
     nextStep()
   }
 
+  const handlePhotoChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0]
+
+    setPhotoError('')
+
+    if (!file) {
+      return
+    }
+
+    if (!allowedTypes.includes(file.type as ProfilePhotoMimeType)) {
+      setPhotoError('Please select a JPG, PNG, or WebP image.')
+      return
+    }
+
+    if (file.size > MAX_PHOTO_SIZE) {
+      setPhotoError('Photo must be 2 MB or smaller.')
+      return
+    }
+
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      if (typeof reader.result !== 'string') {
+        setPhotoError('Unable to read the selected image.')
+        return
+      }
+
+      updatePersonalInfo({
+        photo: {
+          dataUrl: reader.result,
+          fileName: file.name,
+          mimeType: file.type as ProfilePhotoMimeType,
+        },
+      })
+    }
+
+    reader.onerror = () => {
+      setPhotoError('Unable to read the selected image.')
+    }
+
+    reader.readAsDataURL(file)
+  }
+
+  const removePhoto = () => {
+    updatePersonalInfo({
+      photo: null,
+    })
+
+    setPhotoError('')
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6"
     >
+      {/* Profile Photo */}
+      <div className="space-y-3">
+        <div>
+          <p className="text-sm font-medium text-slate-700">
+            Profile Photo
+          </p>
+
+          <p className="mt-1 text-xs text-slate-500">
+            Optional. JPG, PNG, or WebP. Maximum 2 MB.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          {personalInfo.photo ? (
+            <img
+              src={personalInfo.photo.dataUrl}
+              alt="Profile preview"
+              className="h-24 w-24 rounded-xl object-cover ring-1 ring-slate-200"
+            />
+          ) : (
+            <div className="flex h-24 w-24 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400">
+              No photo
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <label
+              htmlFor="profilePhoto"
+              className="inline-flex cursor-pointer rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            >
+              Choose Photo
+            </label>
+
+            <input
+              ref={fileInputRef}
+              id="profilePhoto"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handlePhotoChange}
+              className="sr-only"
+            />
+
+            {personalInfo.photo && (
+              <button
+                type="button"
+                onClick={removePhoto}
+                className="ml-2 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50"
+              >
+                Remove
+              </button>
+            )}
+
+            {photoError && (
+              <p
+                className="text-sm text-red-600"
+                role="alert"
+              >
+                {photoError}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Full Name */}
       <TextInput
         id="fullName"
