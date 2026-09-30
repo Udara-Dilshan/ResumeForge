@@ -1,7 +1,7 @@
 # 🚀 ResumeForge
 
 <div align="center">
-  <img src="docs/resumeforge-banner.png" alt="ResumeForge project preview" width="100%" />
+  <img src="https://github.com/Udara-Dilshan/ResumeForge/blob/main/resumeforge-banner.png" alt="ResumeForge project preview" width="100%" />
 
   <h3>Build. Preview. Analyze. Download.</h3>
 
