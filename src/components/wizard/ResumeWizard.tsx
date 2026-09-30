@@ -3,7 +3,7 @@ import SummaryStep from './SummaryStep'
 import ExperienceStep from './ExperienceStep'
 import EducationStep from './EducationStep'
 import ProjectsStep from './ProjectsStep'
-
+import SkillsStep from './SkillsStep'
 import { useResumeStore } from '../../store/resumeStore'
 
 function ResumeWizard() {
@@ -38,6 +38,11 @@ function ResumeWizard() {
   if (currentStep === 5) {
     return <ProjectsStep />
   }
+
+  if (currentStep === 6) {
+  return <SkillsStep />
+}
+
 
   return (
     <div className="space-y-6">
