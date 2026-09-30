@@ -1,25 +1,11 @@
-import PersonalInfoStep from '../components/wizard/PersonalInfoStep'
+import ResumeWizard from '../components/wizard/ResumeWizard'
 
 function BuilderPage() {
   return (
     <main className="mx-auto max-w-7xl px-6 py-8">
       <div className="grid gap-8 lg:grid-cols-2">
         <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="mb-6">
-            <p className="text-sm font-medium text-slate-500">
-              Step 1
-            </p>
-
-            <h2 className="mt-1 text-2xl font-bold text-slate-900">
-              Personal Information
-            </h2>
-
-            <p className="mt-2 text-sm text-slate-500">
-              Add the basic information that will appear on your resume.
-            </p>
-          </div>
-
-          <PersonalInfoStep />
+          <ResumeWizard />
         </section>
 
         <section className="rounded-2xl border border-slate-200 bg-slate-100 p-6 shadow-sm">

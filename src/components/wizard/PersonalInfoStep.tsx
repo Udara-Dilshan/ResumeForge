@@ -21,6 +21,10 @@ function PersonalInfoStep() {
     (state) => state.updatePersonalInfo,
   )
 
+  const nextStep = useResumeStore(
+    (state) => state.nextStep,
+  )
+
   const {
     register,
     control,
@@ -29,6 +33,7 @@ function PersonalInfoStep() {
     formState: { errors },
   } = useForm<PersonalInfoFormData>({
     resolver: zodResolver(personalInfoSchema),
+
     defaultValues: {
       fullName: personalInfo.fullName,
       professionalTitle: personalInfo.professionalTitle,
@@ -58,6 +63,7 @@ function PersonalInfoStep() {
 
   const onSubmit = (data: PersonalInfoFormData) => {
     updatePersonalInfo(data)
+    nextStep()
   }
 
   return (
@@ -65,6 +71,7 @@ function PersonalInfoStep() {
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6"
     >
+      {/* Full Name */}
       <TextInput
         id="fullName"
         label="Full Name"
@@ -73,6 +80,7 @@ function PersonalInfoStep() {
         error={errors.fullName?.message}
       />
 
+      {/* Professional Title */}
       <TextInput
         id="professionalTitle"
         label="Professional Title"
@@ -81,6 +89,7 @@ function PersonalInfoStep() {
         error={errors.professionalTitle?.message}
       />
 
+      {/* Email */}
       <TextInput
         id="email"
         type="email"
@@ -90,6 +99,7 @@ function PersonalInfoStep() {
         error={errors.email?.message}
       />
 
+      {/* Phone */}
       <div className="grid gap-4 sm:grid-cols-[1fr_1.5fr]">
         <Controller
           name="phoneCountryCode"
@@ -105,6 +115,7 @@ function PersonalInfoStep() {
 
         <TextInput
           id="phoneNumber"
+          type="tel"
           label="Phone Number"
           placeholder="771234567"
           {...register('phoneNumber')}
@@ -112,6 +123,7 @@ function PersonalInfoStep() {
         />
       </div>
 
+      {/* Location */}
       <TextInput
         id="location"
         label="Location"
@@ -120,36 +132,43 @@ function PersonalInfoStep() {
         error={errors.location?.message}
       />
 
+      {/* LinkedIn */}
       <TextInput
         id="linkedinUrl"
+        type="url"
         label="LinkedIn URL"
         placeholder="https://linkedin.com/in/your-name"
         {...register('linkedinUrl')}
         error={errors.linkedinUrl?.message}
       />
 
+      {/* GitHub */}
       <TextInput
         id="githubUrl"
+        type="url"
         label="GitHub URL"
         placeholder="https://github.com/your-username"
         {...register('githubUrl')}
         error={errors.githubUrl?.message}
       />
 
+      {/* Portfolio */}
       <TextInput
         id="portfolioUrl"
+        type="url"
         label="Portfolio / Personal Website"
         placeholder="https://yourwebsite.com"
         {...register('portfolioUrl')}
         error={errors.portfolioUrl?.message}
       />
 
+      {/* Navigation */}
       <div className="flex justify-end border-t border-slate-200 pt-6">
         <button
           type="submit"
-          className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+          className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
         >
-          Save & Continue
+          Next
         </button>
       </div>
     </form>

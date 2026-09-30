@@ -1,3 +1,7 @@
+interface StepIndicatorProps {
+  currentStep: number
+}
+
 const steps = [
   'Personal',
   'Summary',
@@ -11,9 +15,7 @@ const steps = [
   'Additional',
 ]
 
-function StepIndicator() {
-  const currentStep = 1
-
+function StepIndicator({ currentStep }: StepIndicatorProps) {
   return (
     <div className="border-b border-slate-200 bg-white">
       <div className="mx-auto max-w-7xl px-6 py-5">
@@ -46,6 +48,7 @@ function StepIndicator() {
           {steps.map((step, index) => {
             const stepNumber = index + 1
             const isCurrent = stepNumber === currentStep
+            const isCompleted = stepNumber < currentStep
 
             return (
               <div
@@ -54,7 +57,9 @@ function StepIndicator() {
                   'rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap',
                   isCurrent
                     ? 'bg-slate-900 text-white'
-                    : 'bg-slate-100 text-slate-500',
+                    : isCompleted
+                      ? 'bg-slate-200 text-slate-700'
+                      : 'bg-slate-100 text-slate-500',
                 ].join(' ')}
               >
                 {stepNumber}. {step}
