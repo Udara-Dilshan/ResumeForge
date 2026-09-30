@@ -1,12 +1,21 @@
 import PersonalInfoStep from './PersonalInfoStep'
 import SummaryStep from './SummaryStep'
+import ExperienceStep from './ExperienceStep'
 
 import { useResumeStore } from '../../store/resumeStore'
 
 function ResumeWizard() {
-  const currentStep = useResumeStore((state) => state.currentStep)
-  const previousStep = useResumeStore((state) => state.previousStep)
-  const nextStep = useResumeStore((state) => state.nextStep)
+  const currentStep = useResumeStore(
+    (state) => state.currentStep,
+  )
+
+  const previousStep = useResumeStore(
+    (state) => state.previousStep,
+  )
+
+  const nextStep = useResumeStore(
+    (state) => state.nextStep,
+  )
 
   if (currentStep === 1) {
     return <PersonalInfoStep />
@@ -14,6 +23,10 @@ function ResumeWizard() {
 
   if (currentStep === 2) {
     return <SummaryStep />
+  }
+
+  if (currentStep === 3) {
+    return <ExperienceStep />
   }
 
   return (
