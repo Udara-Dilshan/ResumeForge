@@ -7,6 +7,8 @@ import SkillsStep from './SkillsStep'
 import { useResumeStore } from '../../store/resumeStore'
 import CertificationsStep from './CertificationsStep'
 import LanguagesStep from './LanguagesStep'
+import ReferencesStep from './ReferencesStep'
+import CustomSectionsStep from './CustomSectionsStep'
 
 function ResumeWizard() {
   const currentStep = useResumeStore(
@@ -51,6 +53,14 @@ if (currentStep === 7) {
 
 if (currentStep === 8) {
   return <LanguagesStep />
+}
+
+if (currentStep === 9) {
+  return <ReferencesStep />
+}
+
+if (currentStep === 10) {
+  return <CustomSectionsStep />
 }
 
 
