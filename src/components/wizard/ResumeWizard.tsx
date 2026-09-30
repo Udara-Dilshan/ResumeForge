@@ -1,6 +1,7 @@
 import PersonalInfoStep from './PersonalInfoStep'
 import SummaryStep from './SummaryStep'
 import ExperienceStep from './ExperienceStep'
+import ProjectsStep from './ProjectsStep'
 
 import { useResumeStore } from '../../store/resumeStore'
 
@@ -17,6 +18,7 @@ function ResumeWizard() {
     (state) => state.nextStep,
   )
 
+
   if (currentStep === 1) {
     return <PersonalInfoStep />
   }
@@ -28,6 +30,10 @@ function ResumeWizard() {
   if (currentStep === 3) {
     return <ExperienceStep />
   }
+
+  if (currentStep === 5) {
+  return <ProjectsStep />
+}
 
   return (
     <div className="space-y-6">
