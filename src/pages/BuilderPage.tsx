@@ -1,8 +1,9 @@
+import PersonalInfoStep from '../components/wizard/PersonalInfoStep'
+
 function BuilderPage() {
   return (
     <main className="mx-auto max-w-7xl px-6 py-8">
       <div className="grid gap-8 lg:grid-cols-2">
-        {/* Editor */}
         <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-6">
             <p className="text-sm font-medium text-slate-500">
@@ -14,19 +15,13 @@ function BuilderPage() {
             </h2>
 
             <p className="mt-2 text-sm text-slate-500">
-              Start with the basic information that will appear on your
-              resume.
+              Add the basic information that will appear on your resume.
             </p>
           </div>
 
-          <div className="flex min-h-[400px] items-center justify-center rounded-xl bg-slate-50">
-            <p className="text-sm text-slate-400">
-              Personal information form will be built here.
-            </p>
-          </div>
+          <PersonalInfoStep />
         </section>
 
-        {/* Preview */}
         <section className="rounded-2xl border border-slate-200 bg-slate-100 p-6 shadow-sm">
           <div className="mb-4">
             <h2 className="text-lg font-semibold text-slate-900">
