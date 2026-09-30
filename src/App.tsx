@@ -3,6 +3,7 @@ import StepIndicator from './components/layout/StepIndicator'
 import BuilderPage from './pages/BuilderPage'
 import ReviewPage from './pages/ReviewPage'
 import { useResumeStore } from './store/resumeStore'
+import ATSAnalysisPage from './pages/ATSAnalysisPage'
 
 function App() {
   const currentStep = useResumeStore(
@@ -18,10 +19,12 @@ function App() {
       />
 
       {currentStep === 11 ? (
-        <ReviewPage />
-      ) : (
-        <BuilderPage />
-      )}
+  <ReviewPage />
+) : currentStep === 12 ? (
+  <ATSAnalysisPage />
+) : (
+  <BuilderPage />
+)}
     </div>
   )
 }

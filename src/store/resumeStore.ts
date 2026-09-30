@@ -58,7 +58,7 @@ export const useResumeStore = create<ResumeStore>()(
         set((state) => ({
           currentStep: Math.min(
             state.currentStep + 1,
-            11,
+            12,
           ),
         })),
 
@@ -74,7 +74,7 @@ export const useResumeStore = create<ResumeStore>()(
         set(() => ({
           currentStep: Math.min(
             Math.max(step, 1),
-            11,
+            12,
           ),
         })),
 
