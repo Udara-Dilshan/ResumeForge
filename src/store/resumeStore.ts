@@ -44,7 +44,7 @@ interface ResumeStore {
   resetResume: () => void
 }
 
-const MAX_STEP = 13
+const MAX_STEP = 14
 
 const createFreshResume = (): Resume => ({
   ...initialResume,

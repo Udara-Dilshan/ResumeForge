@@ -19,7 +19,9 @@ function formatDate(date: string | null) {
 }
 
 function ResumePreview() {
-  const resume = useResumeStore((state) => state.resume)
+  const resume = useResumeStore(
+    (state) => state.resume,
+  )
 
   const {
     personalInfo,
@@ -111,7 +113,7 @@ function ResumePreview() {
         </div>
       </header>
 
-      {/* Summary */}
+      {/* Professional Summary */}
       {summary.content && (
         <section className="mt-7">
           <h2 className="border-b border-slate-200 pb-2 text-sm font-bold uppercase tracking-wider text-slate-900">
@@ -142,6 +144,7 @@ function ResumePreview() {
 
                     <p className="mt-1 text-sm text-slate-600">
                       {item.company}
+
                       {item.location && (
                         <> • {item.location}</>
                       )}
@@ -164,7 +167,9 @@ function ResumePreview() {
                       .map((line) => line.trim())
                       .filter(Boolean)
                       .map((line, index) => (
-                        <li key={`${item.id}-${index}`}>
+                        <li
+                          key={`${item.id}-${index}`}
+                        >
                           {line}
                         </li>
                       ))}
@@ -183,17 +188,18 @@ function ResumePreview() {
             Education
           </h2>
 
-          <div className="mt-4 space-y-5">
+          <div className="mt-4 space-y-6">
             {education.map((item) => (
               <article key={item.id}>
                 <div className="flex items-start justify-between gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-semibold text-slate-900">
                       {item.degree}
                     </h3>
 
                     <p className="mt-1 text-sm text-slate-600">
                       {item.institution}
+
                       {item.location && (
                         <> • {item.location}</>
                       )}
@@ -210,7 +216,7 @@ function ResumePreview() {
                 </div>
 
                 {item.description && (
-                  <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-700">
+                  <p className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-700">
                     {item.description}
                   </p>
                 )}
@@ -248,6 +254,30 @@ function ResumePreview() {
                     {project.technologies.join(', ')}
                   </p>
                 )}
+
+                <div className="mt-2 flex gap-3 text-xs">
+                  {project.liveDemoUrl && (
+                    <a
+                      href={project.liveDemoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-slate-500 underline hover:text-slate-900"
+                    >
+                      Live Demo
+                    </a>
+                  )}
+
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-slate-500 underline hover:text-slate-900"
+                    >
+                      GitHub
+                    </a>
+                  )}
+                </div>
               </article>
             ))}
           </div>
@@ -284,17 +314,32 @@ function ResumePreview() {
           <div className="mt-4 space-y-4">
             {certifications.map((item) => (
               <article key={item.id}>
-                <h3 className="font-semibold text-slate-900">
-                  {item.name}
-                </h3>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="font-semibold text-slate-900">
+                      {item.name}
+                    </h3>
 
-                <p className="mt-1 text-sm text-slate-600">
-                  {item.issuer}
-                </p>
+                    <p className="mt-1 text-sm text-slate-600">
+                      {item.issuer}
+                    </p>
+                  </div>
 
-                <p className="mt-1 text-xs text-slate-500">
-                  {formatDate(item.issueDate)}
-                </p>
+                  <p className="shrink-0 text-xs text-slate-500">
+                    {formatDate(item.issueDate)}
+                  </p>
+                </div>
+
+                {item.credentialUrl && (
+                  <a
+                    href={item.credentialUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-1 inline-block text-xs text-slate-500 underline"
+                  >
+                    Credential
+                  </a>
+                )}
               </article>
             ))}
           </div>
@@ -343,7 +388,10 @@ function ResumePreview() {
 
                 <p className="mt-1 text-sm text-slate-600">
                   {item.jobTitle}
-                  {item.company && <> • {item.company}</>}
+
+                  {item.company && (
+                    <> • {item.company}</>
+                  )}
                 </p>
 
                 {item.relationship && (

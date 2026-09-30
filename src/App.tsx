@@ -5,6 +5,7 @@ import ReviewPage from './pages/ReviewPage'
 import { useResumeStore } from './store/resumeStore'
 import ATSAnalysisPage from './pages/ATSAnalysisPage'
 import TemplateSelectionPage from './pages/TemplateSelectionPage'
+import TemplatePreviewPage from './pages/TemplatePreviewPage'
 
 function App() {
   const currentStep = useResumeStore(
@@ -24,6 +25,8 @@ function App() {
   <ATSAnalysisPage />
 ) : currentStep === 13 ? (
   <TemplateSelectionPage />
+) : currentStep === 14 ? (
+  <TemplatePreviewPage />
 ) : (
   <BuilderPage />
 )}
