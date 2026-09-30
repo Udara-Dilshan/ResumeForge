@@ -1,14 +1,31 @@
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { summarySchema, type SummaryFormData } from '../../schemas/summarySchema'
+import WizardNavigation from './WizardNavigation'
+
+import {
+  summarySchema,
+  type SummaryFormData,
+} from '../../schemas/summarySchema'
+
 import { useResumeStore } from '../../store/resumeStore'
 
 function SummaryStep() {
-  const summary = useResumeStore((state) => state.resume.summary)
-  const updateResume = useResumeStore((state) => state.updateResume)
-  const previousStep = useResumeStore((state) => state.previousStep)
-  const nextStep = useResumeStore((state) => state.nextStep)
+  const summary = useResumeStore(
+    (state) => state.resume.summary,
+  )
+
+  const updateResume = useResumeStore(
+    (state) => state.updateResume,
+  )
+
+  const previousStep = useResumeStore(
+    (state) => state.previousStep,
+  )
+
+  const nextStep = useResumeStore(
+    (state) => state.nextStep,
+  )
 
   const {
     control,
@@ -16,6 +33,7 @@ function SummaryStep() {
     formState: { errors },
   } = useForm<SummaryFormData>({
     resolver: zodResolver(summarySchema),
+
     defaultValues: {
       content: summary.content,
     },
@@ -42,7 +60,17 @@ function SummaryStep() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6"
+    >
+      <div>
+        <p className="text-sm text-slate-500">
+          Write a short professional summary that explains
+          who you are and what you can offer.
+        </p>
+      </div>
+
       <div className="rounded-xl bg-slate-50 p-4">
         <p className="text-sm font-semibold text-slate-800">
           Writing tips
@@ -73,49 +101,41 @@ function SummaryStep() {
               id="summary"
               {...field}
               rows={10}
-              placeholder="Write a concise summary of your professional background, skills, and goals."
-              className={`w-full resize-none rounded-lg border bg-white px-4 py-3 text-sm outline-none transition focus:ring-2 ${
+              placeholder="Example: Frontend developer and BICT undergraduate with experience building responsive web applications using React and TypeScript."
+              className={[
+                'w-full resize-y rounded-lg border bg-white px-4 py-3 text-sm outline-none transition focus:ring-2',
                 errors.content
                   ? 'border-red-400 focus:ring-red-100'
-                  : 'border-slate-300 focus:border-slate-500 focus:ring-slate-100'
-              }`}
+                  : 'border-slate-300 focus:border-slate-500 focus:ring-slate-100',
+              ].join(' ')}
             />
 
-            {errors.content && (
-              <p className="text-sm text-red-600" role="alert">
-                {errors.content.message}
-              </p>
-            )}
+            <div className="flex items-center justify-between">
+              {errors.content ? (
+                <p
+                  className="text-sm text-red-600"
+                  role="alert"
+                >
+                  {errors.content.message}
+                </p>
+              ) : (
+                <span />
+              )}
+
+              <span className="text-xs text-slate-400">
+                {field.value.length}/1000
+              </span>
+            </div>
           </div>
         )}
       />
 
-      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button
-          type="button"
-          onClick={previousStep}
-          className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-        >
-          Back
-        </button>
-
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={skipStep}
-            className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            Skip for now
-          </button>
-
-          <button
-            type="submit"
-            className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <WizardNavigation
+        onBack={previousStep}
+        onNext={handleSubmit(onSubmit)}
+        onSkip={skipStep}
+        showSkip
+      />
     </form>
   )
 }

@@ -281,12 +281,12 @@ function ReviewPage() {
           </div>
 
           <button
-  type="button"
-  onClick={() => goToStep(12)}
-  className="w-full rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-semibold text-white hover:bg-slate-800"
->
-  Continue to ATS Analysis
-</button>
+            type="button"
+            onClick={() => goToStep(12)}
+            className="w-full rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-semibold text-white hover:bg-slate-800"
+          >
+            Continue to ATS Analysis
+          </button>
         </section>
 
         {/* Resume */}

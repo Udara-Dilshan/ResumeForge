@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import ResumeWizard from '../components/wizard/ResumeWizard'
-import ResumePreview from '../components/preview/ResumePreview'
+import ResumeTemplateRenderer from '../components/preview/ResumeTemplateRenderer'
 
 type MobileView = 'editor' | 'preview'
 
@@ -21,12 +21,8 @@ function BuilderPage() {
           <button
             type="button"
             role="tab"
-            aria-selected={
-              mobileView === 'editor'
-            }
-            onClick={() =>
-              setMobileView('editor')
-            }
+            aria-selected={mobileView === 'editor'}
+            onClick={() => setMobileView('editor')}
             className={[
               'rounded-lg px-4 py-2.5 text-sm font-semibold transition',
               mobileView === 'editor'
@@ -40,12 +36,8 @@ function BuilderPage() {
           <button
             type="button"
             role="tab"
-            aria-selected={
-              mobileView === 'preview'
-            }
-            onClick={() =>
-              setMobileView('preview')
-            }
+            aria-selected={mobileView === 'preview'}
+            onClick={() => setMobileView('preview')}
             className={[
               'rounded-lg px-4 py-2.5 text-sm font-semibold transition',
               mobileView === 'preview'
@@ -92,7 +84,7 @@ function BuilderPage() {
 
           <div className="overflow-x-auto">
             <div className="mx-auto min-w-[320px] w-full max-w-[794px]">
-              <ResumePreview />
+              <ResumeTemplateRenderer />
             </div>
           </div>
         </section>

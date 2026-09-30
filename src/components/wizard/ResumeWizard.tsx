@@ -44,24 +44,24 @@ function ResumeWizard() {
   }
 
   if (currentStep === 6) {
-  return <SkillsStep />
-}
+    return <SkillsStep />
+  }
 
-if (currentStep === 7) {
-  return <CertificationsStep />
-}
+  if (currentStep === 7) {
+    return <CertificationsStep />
+  }
 
-if (currentStep === 8) {
-  return <LanguagesStep />
-}
+  if (currentStep === 8) {
+    return <LanguagesStep />
+  }
 
-if (currentStep === 9) {
-  return <ReferencesStep />
-}
+  if (currentStep === 9) {
+    return <ReferencesStep />
+  }
 
-if (currentStep === 10) {
-  return <CustomSectionsStep />
-}
+  if (currentStep === 10) {
+    return <CustomSectionsStep />
+  }
 
 
   return (

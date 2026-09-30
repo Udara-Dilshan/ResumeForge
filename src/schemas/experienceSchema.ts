@@ -7,19 +7,18 @@ const resumeDateSchema = z
     'Select a valid month and year',
   )
 
-export const educationItemSchema = z
+export const experienceItemSchema = z
   .object({
     id: z.string(),
-
-    degree: z
+    jobTitle: z
       .string()
       .trim()
-      .min(2, 'Degree or qualification is required'),
+      .min(2, 'Job title is required'),
 
-    institution: z
+    company: z
       .string()
       .trim()
-      .min(2, 'Institution is required'),
+      .min(2, 'Company is required'),
 
     location: z.string(),
 
@@ -27,7 +26,7 @@ export const educationItemSchema = z
 
     endDate: resumeDateSchema.nullable(),
 
-    currentlyStudying: z.boolean(),
+    currentlyWorking: z.boolean(),
 
     description: z.string(),
   })
@@ -40,7 +39,10 @@ export const educationItemSchema = z
       })
     }
 
-    if (!item.currentlyStudying && !item.endDate) {
+    if (
+      !item.currentlyWorking &&
+      !item.endDate
+    ) {
       context.addIssue({
         code: 'custom',
         path: ['endDate'],
@@ -61,6 +63,11 @@ export const educationItemSchema = z
     }
   })
 
-export const educationSchema = z.object({
-  education: z.array(educationItemSchema),
+export const experienceSchema = z.object({
+  experience: z.array(
+    experienceItemSchema,
+  ),
 })
+
+export type ExperienceFormData =
+  z.infer<typeof experienceSchema>

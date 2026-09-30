@@ -87,29 +87,39 @@ export const useResumeStore =
         selectedTemplate: 'ats-classic',
 
         updateResume: (updates) =>
-          set((state) => ({
-            resume: {
-              ...state.resume,
-              ...updates,
-              updatedAt:
-                new Date().toISOString(),
-            },
-          })),
+          set((state) => {
+            const now = new Date().toISOString()
+
+            return {
+              resume: {
+                ...state.resume,
+                ...updates,
+                createdAt:
+                  state.resume.createdAt || now,
+                updatedAt: now,
+              },
+            }
+          }),
 
         updatePersonalInfo: (updates) =>
-          set((state) => ({
-            resume: {
-              ...state.resume,
+          set((state) => {
+            const now = new Date().toISOString()
 
-              personalInfo: {
-                ...state.resume.personalInfo,
-                ...updates,
+            return {
+              resume: {
+                ...state.resume,
+
+                personalInfo: {
+                  ...state.resume.personalInfo,
+                  ...updates,
+                },
+
+                createdAt:
+                  state.resume.createdAt || now,
+                updatedAt: now,
               },
-
-              updatedAt:
-                new Date().toISOString(),
-            },
-          })),
+            }
+          }),
 
         nextStep: () =>
           set((state) => ({

@@ -1,5 +1,8 @@
 import { useState } from 'react'
+import type { ChangeEvent } from 'react'
+
 import TextInput from '../ui/TextInput'
+import WizardNavigation from './WizardNavigation'
 import { useResumeStore } from '../../store/resumeStore'
 
 function SkillsStep() {
@@ -25,44 +28,60 @@ function SkillsStep() {
 
   const [error, setError] = useState('')
 
-  const handleNext = () => {
-    const nextSkills = value
+  const updateSkills = (nextValue: string) => {
+    const parsedSkills = nextValue
       .split(',')
       .map((skill) => skill.trim())
       .filter(Boolean)
 
     updateResume({
-      skills: nextSkills,
+      skills: parsedSkills,
     })
-
-    setError('')
-    nextStep()
-  }
-
-  const handleSkip = () => {
-    updateResume({
-      skills: [],
-    })
-
-    setValue('')
-    setError('')
-    nextStep()
   }
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: ChangeEvent<HTMLInputElement>,
   ) => {
-    setValue(event.target.value)
+    const nextValue = event.target.value
+
+    setValue(nextValue)
+    updateSkills(nextValue)
 
     if (error) {
       setError('')
     }
   }
 
+  const handleNext = () => {
+    updateSkills(value)
+    setError('')
+    nextStep()
+  }
+
+  const handleSkip = () => {
+    setValue('')
+    setError('')
+
+    updateResume({
+      skills: [],
+    })
+
+    nextStep()
+  }
+
+  const previewSkills = value
+    .split(',')
+    .map((skill) => skill.trim())
+    .filter(Boolean)
+
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-sm text-slate-500">
+        <h2 className="text-xl font-semibold text-slate-900">
+          Skills
+        </h2>
+
+        <p className="mt-1 text-sm text-slate-500">
           Add your technical and professional skills.
         </p>
       </div>
@@ -86,56 +105,31 @@ function SkillsStep() {
         </p>
       </div>
 
-      {value.trim() && (
+      {previewSkills.length > 0 && (
         <div>
           <p className="mb-3 text-sm font-medium text-slate-700">
             Preview
           </p>
 
           <div className="flex flex-wrap gap-2">
-            {value
-              .split(',')
-              .map((skill) => skill.trim())
-              .filter(Boolean)
-              .map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700"
-                >
-                  {skill}
-                </span>
-              ))}
+            {previewSkills.map((skill, index) => (
+              <span
+                key={`${skill}-${index}`}
+                className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700"
+              >
+                {skill}
+              </span>
+            ))}
           </div>
         </div>
       )}
 
-      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button
-          type="button"
-          onClick={previousStep}
-          className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-        >
-          Back
-        </button>
-
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={handleSkip}
-            className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            Skip for now
-          </button>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <WizardNavigation
+        onBack={previousStep}
+        onNext={handleNext}
+        onSkip={handleSkip}
+        showSkip
+      />
     </div>
   )
 }

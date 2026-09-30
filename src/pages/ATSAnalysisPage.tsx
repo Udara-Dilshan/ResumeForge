@@ -243,17 +243,17 @@ SQL`}
             </h2>
 
             <p className="mt-1 text-sm text-slate-500">
-              Template selection will be added next.
+              Choose a template that matches the style you want for your final PDF.
             </p>
           </div>
 
           <button
-  type="button"
-  onClick={() => goToStep(13)}
-  className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
->
-  Choose Template
-</button>
+            type="button"
+            onClick={() => goToStep(13)}
+            className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+          >
+            Choose Template
+          </button>
         </div>
       </div>
     </main>

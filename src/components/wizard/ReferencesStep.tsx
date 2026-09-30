@@ -2,20 +2,26 @@ import { useState } from 'react'
 
 import TextInput from '../ui/TextInput'
 import CountrySelect from '../ui/CountrySelect'
+import WizardNavigation from './WizardNavigation'
 
 import type { Reference } from '../../types/resume'
+
 import { referenceItemSchema } from '../../schemas/referenceSchema'
+
 import { useResumeStore } from '../../store/resumeStore'
 
 function createReference(): Reference {
   return {
     id: crypto.randomUUID(),
+
     fullName: '',
     jobTitle: '',
     company: '',
     email: '',
+
     phoneCountryCode: '+94',
     phoneNumber: '',
+
     relationship: '',
   }
 }
@@ -50,10 +56,14 @@ function ReferencesStep() {
     updates: Partial<Reference>,
   ) => {
     updateResume({
-      references: references.map((reference) =>
-        reference.id === id
-          ? { ...reference, ...updates }
-          : reference,
+      references: references.map(
+        (reference) =>
+          reference.id === id
+            ? {
+                ...reference,
+                ...updates,
+              }
+            : reference,
       ),
     })
   }
@@ -70,7 +80,8 @@ function ReferencesStep() {
   const removeReference = (id: string) => {
     updateResume({
       references: references.filter(
-        (reference) => reference.id !== id,
+        (reference) =>
+          reference.id !== id,
       ),
     })
 
@@ -89,7 +100,9 @@ function ReferencesStep() {
 
     for (const reference of references) {
       const result =
-        referenceItemSchema.safeParse(reference)
+        referenceItemSchema.safeParse(
+          reference,
+        )
 
       if (!result.success) {
         nextErrors[reference.id] = {}
@@ -124,16 +137,17 @@ function ReferencesStep() {
       showReferences: false,
     })
 
+    setErrors({})
+
     nextStep()
   }
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-sm text-slate-500">
-          References are optional. You can save them without showing them on the resume.
-        </p>
-      </div>
+      <p className="text-sm text-slate-500">
+        References are optional. You can keep reference data saved
+        without showing it on the resume.
+      </p>
 
       <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
         <input
@@ -141,7 +155,8 @@ function ReferencesStep() {
           checked={showReferences}
           onChange={(event) =>
             updateResume({
-              showReferences: event.target.checked,
+              showReferences:
+                event.target.checked,
             })
           }
           className="mt-0.5 h-4 w-4 rounded border-slate-300"
@@ -153,7 +168,7 @@ function ReferencesStep() {
           </span>
 
           <span className="mt-1 block text-xs text-slate-500">
-            Reference data remains saved when this is disabled.
+            Reference data stays saved when this is disabled.
           </span>
         </span>
       </label>
@@ -187,7 +202,9 @@ function ReferencesStep() {
               <button
                 type="button"
                 onClick={() =>
-                  removeReference(reference.id)
+                  removeReference(
+                    reference.id,
+                  )
                 }
                 className="text-sm font-medium text-red-600 hover:text-red-700"
               >
@@ -202,10 +219,13 @@ function ReferencesStep() {
                 placeholder="John Perera"
                 value={reference.fullName}
                 onChange={(event) =>
-                  updateReference(reference.id, {
-                    fullName:
-                      event.target.value,
-                  })
+                  updateReference(
+                    reference.id,
+                    {
+                      fullName:
+                        event.target.value,
+                    },
+                  )
                 }
                 error={entryErrors.fullName}
               />
@@ -216,10 +236,13 @@ function ReferencesStep() {
                 placeholder="Senior Software Engineer"
                 value={reference.jobTitle}
                 onChange={(event) =>
-                  updateReference(reference.id, {
-                    jobTitle:
-                      event.target.value,
-                  })
+                  updateReference(
+                    reference.id,
+                    {
+                      jobTitle:
+                        event.target.value,
+                    },
+                  )
                 }
                 error={entryErrors.jobTitle}
               />
@@ -230,10 +253,13 @@ function ReferencesStep() {
                 placeholder="ABC Technologies"
                 value={reference.company}
                 onChange={(event) =>
-                  updateReference(reference.id, {
-                    company:
-                      event.target.value,
-                  })
+                  updateReference(
+                    reference.id,
+                    {
+                      company:
+                        event.target.value,
+                    },
+                  )
                 }
                 error={entryErrors.company}
               />
@@ -245,10 +271,13 @@ function ReferencesStep() {
                 placeholder="john@example.com"
                 value={reference.email}
                 onChange={(event) =>
-                  updateReference(reference.id, {
-                    email:
-                      event.target.value,
-                  })
+                  updateReference(
+                    reference.id,
+                    {
+                      email:
+                        event.target.value,
+                    },
+                  )
                 }
                 error={entryErrors.email}
               />
@@ -259,9 +288,13 @@ function ReferencesStep() {
                     reference.phoneCountryCode
                   }
                   onChange={(value) =>
-                    updateReference(reference.id, {
-                      phoneCountryCode: value,
-                    })
+                    updateReference(
+                      reference.id,
+                      {
+                        phoneCountryCode:
+                          value,
+                      },
+                    )
                   }
                   error={
                     entryErrors.phoneCountryCode
@@ -277,10 +310,13 @@ function ReferencesStep() {
                     reference.phoneNumber
                   }
                   onChange={(event) =>
-                    updateReference(reference.id, {
-                      phoneNumber:
-                        event.target.value,
-                    })
+                    updateReference(
+                      reference.id,
+                      {
+                        phoneNumber:
+                          event.target.value,
+                      },
+                    )
                   }
                   error={
                     entryErrors.phoneNumber
@@ -296,10 +332,13 @@ function ReferencesStep() {
                   reference.relationship
                 }
                 onChange={(event) =>
-                  updateReference(reference.id, {
-                    relationship:
-                      event.target.value,
-                  })
+                  updateReference(
+                    reference.id,
+                    {
+                      relationship:
+                        event.target.value,
+                    },
+                  )
                 }
                 error={
                   entryErrors.relationship
@@ -318,33 +357,12 @@ function ReferencesStep() {
         + Add Reference
       </button>
 
-      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button
-          type="button"
-          onClick={previousStep}
-          className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-        >
-          Back
-        </button>
-
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={handleSkip}
-            className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            Skip for now
-          </button>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <WizardNavigation
+        onBack={previousStep}
+        onNext={handleNext}
+        onSkip={handleSkip}
+        showSkip
+      />
     </div>
   )
 }

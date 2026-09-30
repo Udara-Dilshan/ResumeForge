@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import TextInput from '../ui/TextInput'
+import WizardNavigation from './WizardNavigation'
 
 import type {
   Language,
@@ -8,6 +9,7 @@ import type {
 } from '../../types/resume'
 
 import { languageItemSchema } from '../../schemas/languageSchema'
+
 import { useResumeStore } from '../../store/resumeStore'
 
 const proficiencyOptions: LanguageProficiency[] = [
@@ -53,14 +55,15 @@ function LanguagesStep() {
     id: string,
     updates: Partial<Language>,
   ) => {
-    const nextEntries = entries.map((entry) =>
-      entry.id === id
-        ? { ...entry, ...updates }
-        : entry,
-    )
-
     updateResume({
-      languages: nextEntries,
+      languages: entries.map((entry) =>
+        entry.id === id
+          ? {
+              ...entry,
+              ...updates,
+            }
+          : entry,
+      ),
     })
   }
 
@@ -129,6 +132,8 @@ function LanguagesStep() {
       languages: [],
     })
 
+    setErrors({})
+
     nextStep()
   }
 
@@ -183,7 +188,8 @@ function LanguagesStep() {
                 value={entry.language}
                 onChange={(event) =>
                   updateEntry(entry.id, {
-                    language: event.target.value,
+                    language:
+                      event.target.value,
                   })
                 }
                 error={entryErrors.language}
@@ -207,11 +213,12 @@ function LanguagesStep() {
                           .value as LanguageProficiency,
                     })
                   }
-                  className={`w-full rounded-lg border bg-white px-4 py-3 text-sm outline-none transition focus:ring-2 ${
+                  className={[
+                    'w-full rounded-lg border bg-white px-4 py-3 text-sm outline-none transition focus:ring-2',
                     entryErrors.proficiency
                       ? 'border-red-400 focus:ring-red-100'
-                      : 'border-slate-300 focus:border-slate-500 focus:ring-slate-100'
-                  }`}
+                      : 'border-slate-300 focus:border-slate-500 focus:ring-slate-100',
+                  ].join(' ')}
                 >
                   {proficiencyOptions.map(
                     (option) => (
@@ -247,33 +254,12 @@ function LanguagesStep() {
         + Add Language
       </button>
 
-      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button
-          type="button"
-          onClick={previousStep}
-          className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-        >
-          Back
-        </button>
-
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={handleSkip}
-            className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            Skip for now
-          </button>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <WizardNavigation
+        onBack={previousStep}
+        onNext={handleNext}
+        onSkip={handleSkip}
+        showSkip
+      />
     </div>
   )
 }

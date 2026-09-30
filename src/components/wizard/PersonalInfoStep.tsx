@@ -296,14 +296,16 @@ function PersonalInfoStep() {
       />
 
       {/* Navigation */}
-      <div className="flex justify-end border-t border-slate-200 pt-6">
-        <button
-          type="submit"
-          className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
-        >
-          Next
-        </button>
-      </div>
+    <div
+  className="border-t border-slate-200 pt-6"
+>
+  <button
+    type="submit"
+    className="w-full rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800 sm:w-auto sm:float-right"
+  >
+    Next
+  </button>
+</div>
     </form>
   )
 }

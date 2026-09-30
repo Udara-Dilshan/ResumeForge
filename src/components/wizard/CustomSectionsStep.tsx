@@ -1,9 +1,12 @@
 import { useState } from 'react'
 
 import TextInput from '../ui/TextInput'
+import WizardNavigation from './WizardNavigation'
 
 import type { CustomSection } from '../../types/resume'
+
 import { customSectionItemSchema } from '../../schemas/customSectionSchema'
+
 import { useResumeStore } from '../../store/resumeStore'
 
 function createCustomSection(): CustomSection {
@@ -41,10 +44,14 @@ function CustomSectionsStep() {
     updates: Partial<CustomSection>,
   ) => {
     updateResume({
-      customSections: entries.map((entry) =>
-        entry.id === id
-          ? { ...entry, ...updates }
-          : entry,
+      customSections: entries.map(
+        (entry) =>
+          entry.id === id
+            ? {
+                ...entry,
+                ...updates,
+              }
+            : entry,
       ),
     })
   }
@@ -73,11 +80,16 @@ function CustomSectionsStep() {
   }
 
   const validate = () => {
-    const nextErrors: Record<string, string> = {}
+    const nextErrors: Record<
+      string,
+      string
+    > = {}
 
     for (const entry of entries) {
       const result =
-        customSectionItemSchema.safeParse(entry)
+        customSectionItemSchema.safeParse(
+          entry,
+        )
 
       if (!result.success) {
         nextErrors[entry.id] =
@@ -103,6 +115,8 @@ function CustomSectionsStep() {
     updateResume({
       customSections: [],
     })
+
+    setErrors({})
 
     nextStep()
   }
@@ -144,7 +158,9 @@ function CustomSectionsStep() {
 
             <button
               type="button"
-              onClick={() => removeSection(entry.id)}
+              onClick={() =>
+                removeSection(entry.id)
+              }
               className="text-sm font-medium text-red-600 hover:text-red-700"
             >
               Remove
@@ -179,7 +195,8 @@ function CustomSectionsStep() {
                 value={entry.content}
                 onChange={(event) =>
                   updateEntry(entry.id, {
-                    content: event.target.value,
+                    content:
+                      event.target.value,
                   })
                 }
                 placeholder={`Employee of the Year — 2025
@@ -228,33 +245,13 @@ Volunteer mentor for programming students`}
         + Add Custom Section
       </button>
 
-      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button
-          type="button"
-          onClick={previousStep}
-          className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-        >
-          Back
-        </button>
-
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={handleSkip}
-            className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            Skip for now
-          </button>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            Review Resume
-          </button>
-        </div>
-      </div>
+      <WizardNavigation
+        onBack={previousStep}
+        onNext={handleNext}
+        onSkip={handleSkip}
+        showSkip
+        nextLabel="Review Resume"
+      />
     </div>
   )
 }
