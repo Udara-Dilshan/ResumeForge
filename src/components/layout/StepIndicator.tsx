@@ -20,22 +20,29 @@ function StepIndicator({
 }: StepIndicatorProps) {
   const isReview = currentStep === 11
 const isATS = currentStep === 12
+const isTemplate = currentStep === 13
 
-  const progress =
-  isReview || isATS
+const progress =
+  isReview ||
+  isATS ||
+  isTemplate
     ? 100
     : currentStep * 10
+
+
   return (
     <div className="border-b border-slate-200 bg-white">
       <div className="mx-auto max-w-7xl px-6 py-5">
         <div className="mb-3 flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-slate-500">
+<p className="text-sm font-medium text-slate-500">
   {isReview
     ? 'Review Resume'
     : isATS
       ? 'ATS Analysis'
-      : `Step ${currentStep} of ${steps.length}`}
+      : isTemplate
+        ? 'Template Selection'
+        : `Step ${currentStep} of ${steps.length}`}
 </p>
 
 <h2 className="text-lg font-semibold text-slate-900">
@@ -43,8 +50,12 @@ const isATS = currentStep === 12
     ? 'Review'
     : isATS
       ? 'ATS Analysis'
-      : steps[currentStep - 1]}
+      : isTemplate
+        ? 'Templates'
+        : steps[currentStep - 1]}
 </h2>
+
+
           </div>
 
           <span className="text-sm text-slate-500">

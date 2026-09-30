@@ -11,93 +11,232 @@ import type {
 
 import { initialResume } from '../utils/initialResume'
 
+export type ResumeTemplate =
+  | 'ats-classic'
+  | 'modern'
+  | 'compact'
+
 interface ResumeStore {
   resume: Resume
+
   currentStep: number
 
-  updateResume: (updates: Partial<Resume>) => void
-  updatePersonalInfo: (updates: Partial<PersonalInfo>) => void
+  selectedTemplate: ResumeTemplate
+
+  updateResume: (
+    updates: Partial<Resume>,
+  ) => void
+
+  updatePersonalInfo: (
+    updates: Partial<PersonalInfo>,
+  ) => void
 
   nextStep: () => void
+
   previousStep: () => void
+
   goToStep: (step: number) => void
+
+  setSelectedTemplate: (
+    template: ResumeTemplate,
+  ) => void
 
   resetResume: () => void
 }
 
-export const useResumeStore = create<ResumeStore>()(
-  persist(
-    (set) => ({
-      resume: initialResume,
-      currentStep: 1,
+const MAX_STEP = 13
 
-      updateResume: (updates) =>
-        set((state) => ({
-          resume: {
-            ...state.resume,
-            ...updates,
-            updatedAt: new Date().toISOString(),
-          },
-        })),
+const createFreshResume = (): Resume => ({
+  ...initialResume,
 
-      updatePersonalInfo: (updates) =>
-        set((state) => ({
-          resume: {
-            ...state.resume,
+  personalInfo: {
+    ...initialResume.personalInfo,
+  },
+
+  summary: {
+    ...initialResume.summary,
+  },
+
+  experience: [],
+
+  education: [],
+
+  projects: [],
+
+  skills: [],
+
+  certifications: [],
+
+  languages: [],
+
+  references: [],
+
+  showReferences: false,
+
+  customSections: [],
+})
+
+export const useResumeStore =
+  create<ResumeStore>()(
+    persist(
+      (set) => ({
+        resume: createFreshResume(),
+
+        currentStep: 1,
+
+        selectedTemplate: 'ats-classic',
+
+        updateResume: (updates) =>
+          set((state) => ({
+            resume: {
+              ...state.resume,
+              ...updates,
+              updatedAt:
+                new Date().toISOString(),
+            },
+          })),
+
+        updatePersonalInfo: (updates) =>
+          set((state) => ({
+            resume: {
+              ...state.resume,
+
+              personalInfo: {
+                ...state.resume.personalInfo,
+                ...updates,
+              },
+
+              updatedAt:
+                new Date().toISOString(),
+            },
+          })),
+
+        nextStep: () =>
+          set((state) => ({
+            currentStep: Math.min(
+              state.currentStep + 1,
+              MAX_STEP,
+            ),
+          })),
+
+        previousStep: () =>
+          set((state) => ({
+            currentStep: Math.max(
+              state.currentStep - 1,
+              1,
+            ),
+          })),
+
+        goToStep: (step) =>
+          set(() => ({
+            currentStep: Math.min(
+              Math.max(step, 1),
+              MAX_STEP,
+            ),
+          })),
+
+        setSelectedTemplate: (template) =>
+          set(() => ({
+            selectedTemplate: template,
+          })),
+
+        resetResume: () =>
+          set(() => {
+            const now =
+              new Date().toISOString()
+
+            return {
+              resume: {
+                ...createFreshResume(),
+                createdAt: now,
+                updatedAt: now,
+              },
+
+              currentStep: 1,
+
+              selectedTemplate:
+                'ats-classic',
+            }
+          }),
+      }),
+
+      {
+        name: 'resumeforge-resume',
+
+        storage: createJSONStorage(
+          () => localStorage,
+        ),
+
+        version: 2,
+
+        migrate: (persistedState) => {
+          const oldState =
+            persistedState as Partial<ResumeStore>
+
+          const oldResume =
+            oldState.resume as
+              | Partial<Resume>
+              | undefined
+
+          const mergedResume: Resume = {
+            ...createFreshResume(),
+            ...oldResume,
 
             personalInfo: {
-              ...state.resume.personalInfo,
-              ...updates,
+              ...createFreshResume()
+                .personalInfo,
+              ...(oldResume?.personalInfo ?? {}),
             },
 
-            updatedAt: new Date().toISOString(),
-          },
-        })),
+            summary: {
+              ...createFreshResume().summary,
+              ...(oldResume?.summary ?? {}),
+            },
 
-      nextStep: () =>
-        set((state) => ({
-          currentStep: Math.min(
-            state.currentStep + 1,
-            12,
-          ),
-        })),
+            experience:
+              oldResume?.experience ?? [],
 
-      previousStep: () =>
-        set((state) => ({
-          currentStep: Math.max(
-            state.currentStep - 1,
-            1,
-          ),
-        })),
+            education:
+              oldResume?.education ?? [],
 
-      goToStep: (step) =>
-        set(() => ({
-          currentStep: Math.min(
-            Math.max(step, 1),
-            12,
-          ),
-        })),
+            projects:
+              oldResume?.projects ?? [],
 
-      resetResume: () =>
-        set(() => ({
-          resume: {
-            ...initialResume,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
+            skills:
+              oldResume?.skills ?? [],
 
-          currentStep: 1,
-        })),
-    }),
+            certifications:
+              oldResume?.certifications ?? [],
 
-    {
-      name: 'resumeforge-resume',
+            languages:
+              oldResume?.languages ?? [],
 
-      storage: createJSONStorage(
-        () => localStorage,
-      ),
+            references:
+              oldResume?.references ?? [],
 
-      version: 1,
-    },
-  ),
-)
+            customSections:
+              oldResume?.customSections ?? [],
+
+            showReferences:
+              oldResume?.showReferences ??
+              false,
+
+            schemaVersion:
+              oldResume?.schemaVersion ??
+              1,
+          }
+
+          return {
+            resume: mergedResume,
+
+            currentStep:
+              oldState.currentStep ?? 1,
+
+            selectedTemplate:
+              oldState.selectedTemplate ??
+              'ats-classic',
+          }
+        },
+      },
+    ),
+  )

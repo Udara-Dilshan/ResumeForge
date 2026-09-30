@@ -248,11 +248,12 @@ SQL`}
           </div>
 
           <button
-            type="button"
-            className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            Choose Template
-          </button>
+  type="button"
+  onClick={() => goToStep(13)}
+  className="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+>
+  Choose Template
+</button>
         </div>
       </div>
     </main>
