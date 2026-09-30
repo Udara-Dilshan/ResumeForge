@@ -6,7 +6,7 @@ import ProjectsStep from './ProjectsStep'
 import SkillsStep from './SkillsStep'
 import { useResumeStore } from '../../store/resumeStore'
 import CertificationsStep from './CertificationsStep'
-
+import LanguagesStep from './LanguagesStep'
 
 function ResumeWizard() {
   const currentStep = useResumeStore(
@@ -47,6 +47,10 @@ function ResumeWizard() {
 
 if (currentStep === 7) {
   return <CertificationsStep />
+}
+
+if (currentStep === 8) {
+  return <LanguagesStep />
 }
 
 
